@@ -7,9 +7,9 @@ using System.Runtime.InteropServices;
 [assembly: AssemblyTitle("BetterLogixWiresThatCanScroll")]
 [assembly: AssemblyDescription("")]
 [assembly: AssemblyConfiguration("")]
-[assembly: AssemblyCompany("eia485|Banane9")]
+[assembly: AssemblyCompany("Banane9")]
 [assembly: AssemblyProduct("BetterLogixWiresThatCanScroll")]
-[assembly: AssemblyCopyright("Copyright © eia485|Banane9 2021")]
+[assembly: AssemblyCopyright("Copyright © Banane9 2021")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

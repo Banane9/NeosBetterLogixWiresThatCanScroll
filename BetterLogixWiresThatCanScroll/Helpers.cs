@@ -30,7 +30,7 @@ namespace BetterLogixWiresThatCanScroll
 
         public static FresnelMaterial GetWireMaterial(this ConnectionWire instance, color color, int dimensions, bool isImpulse)
         {
-            Slot LogixAssets = instance.World.AssetsSlot.FindOrAdd("LogixAssets");
+            var logixAssets = instance.World.AssetsSlot.FindOrAdd("LogixAssets");
 
             // Use extended key for static material to be backwards compatible with old version
             var key = $"Logix_WireMaterial_{color}_{(isImpulse ? "Impulse" : "Value")}_{dimensions}{(animateWires ? "" : "_Static")}";
@@ -38,7 +38,7 @@ namespace BetterLogixWiresThatCanScroll
             var fresnelMaterial = (FresnelMaterial)instance.World.KeyOwner(key);
             if (fresnelMaterial == null)
             {
-                fresnelMaterial = LogixAssets.AttachComponent<FresnelMaterial>();
+                fresnelMaterial = logixAssets.AttachComponent<FresnelMaterial>();
                 fresnelMaterial.AssignKey(key, 2);
                 fresnelMaterial.BlendMode.Value = BlendMode.Alpha;
                 fresnelMaterial.ZWrite.Value = ZWrite.On;
@@ -67,11 +67,11 @@ namespace BetterLogixWiresThatCanScroll
             var panner = (Panner2D)instance.World.KeyOwner(pannerKey);
             if (panner == null)
             {
-                panner = LogixAssets.AttachComponent<Panner2D>();
+                panner = logixAssets.AttachComponent<Panner2D>();
                 panner.Speed = new float2(isImpulse ? -1 : 1, 0);
                 panner.AssignKey(pannerKey, 2);
 
-                multiDriver = LogixAssets.AttachComponent<ValueMultiDriver<float2>>();
+                multiDriver = logixAssets.AttachComponent<ValueMultiDriver<float2>>();
                 panner.Target = multiDriver.Value;
             }
             else
@@ -79,7 +79,7 @@ namespace BetterLogixWiresThatCanScroll
                 multiDriver = panner?.Target?.Parent as ValueMultiDriver<float2>;
                 if (multiDriver == null)
                 {
-                    multiDriver = LogixAssets.AttachComponent<ValueMultiDriver<float2>>();
+                    multiDriver = logixAssets.AttachComponent<ValueMultiDriver<float2>>();
                     panner.Target = multiDriver.Value;
                 }
             }

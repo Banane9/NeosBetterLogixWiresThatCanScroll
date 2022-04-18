@@ -13,7 +13,7 @@ namespace BetterLogixWiresThatCanScroll
         public static ModConfigurationKey<bool> AnimateWires = new ModConfigurationKey<bool>("AnimateWires", "Make the arrows on LogiX wires scroll.", () => false);
 
         public static ModConfiguration Config;
-        public override string Author => "eia485|Banane9";
+        public override string Author => "Banane9";
         public override string Link => "https://github.com/Banane9/NeosBetterLogixWiresThatCanScroll";
         public override string Name => "BetterLogixWiresThatCanScroll";
         public override string Version => "1.1.0";
