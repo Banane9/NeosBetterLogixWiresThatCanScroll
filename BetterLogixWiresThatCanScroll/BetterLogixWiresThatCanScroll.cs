@@ -4,6 +4,7 @@ using System;
 using FrooxEngine;
 using FrooxEngine.LogiX;
 using BaseX;
+using System.Linq;
 
 namespace BetterLogixWiresThatCanScroll
 {
@@ -16,7 +17,7 @@ namespace BetterLogixWiresThatCanScroll
         public override string Author => "Banane9";
         public override string Link => "https://github.com/Banane9/NeosBetterLogixWiresThatCanScroll";
         public override string Name => "BetterLogixWiresThatCanScroll";
-        public override string Version => "1.1.0";
+        public override string Version => "1.1.1";
 
         public override void OnEngineInit()
         {
@@ -29,6 +30,8 @@ namespace BetterLogixWiresThatCanScroll
         [HarmonyPatch(typeof(ConnectionWire))]
         private static class BetterLogixWiresThatScrollPatch
         {
+            private static readonly Type outputAttribute = typeof(AsOutput);
+
             [HarmonyPrefix]
             [HarmonyPatch("DeleteHighlight")]
             private static bool DeleteHighlightPrefix(SyncRef<FresnelMaterial> ___Material, SyncRef<Slot> ___WireSlot, ConnectionWire __instance)
@@ -109,18 +112,23 @@ namespace BetterLogixWiresThatCanScroll
                 ___Material.Target.NearTextureScale.Value = value;
 
                 ___WireSlot.Target.GetComponent<MeshRenderer>().Materials[0] = ___Material.Target;
+                ___WireSlot.Target.GetComponent<MeshCollider>()?.Destroy();
 
-                __instance.SetupAsOutput(output);
+                var input = __instance.Slot.GetComponentInParents<InputProxy>()?.InputField.Target;
+                var inputParent = input?.FindNearestParent<LogixNode>();
 
-                foreach (var collider in ___WireSlot.Target.GetComponents<MeshCollider>())
-                    collider.Destroy();
+                if (output || (input != null && Enumerable.Range(0, inputParent.SyncMemberCount)
+                                        .Select(i => inputParent.GetSyncMemberFieldInfo(i))
+                                        .Where(field => field.GetCustomAttributes(outputAttribute, false).Any())
+                                        .Any(field => field.GetValue(inputParent) == input)))
+                    __instance.SetupAsOutput();
 
-                if (!Config.GetValue(AnimateWires))
-                    return false;
-
-                Panner2D panner = ___WireSlot.Target.AttachComponent<Panner2D>();
-                panner.Speed = new float2(___TypeColor == color.White ? -1 : 1, 0);
-                panner.Target = ___Material.Target.NearTextureOffset;
+                if (Config.GetValue(AnimateWires))
+                {
+                    Panner2D panner = ___WireSlot.Target.AttachComponent<Panner2D>();
+                    panner.Speed = new float2(___TypeColor == color.White ? -1 : 1, 0);
+                    panner.Target = ___Material.Target.NearTextureOffset;
+                }
 
                 return false;
             }
