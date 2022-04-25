@@ -6,7 +6,7 @@ A [NeosModLoader](https://github.com/zkxs/NeosModLoader) mod for [Neos VR](https
 The arrows on the wires can optionally be animated to move towards the target. Using animated wires is no longer "infectious" to other users of this mod.
 Whether animated or static wires are spawned can be toggled on the fly in the NML config.  
 To switch a wire, it has to be destroyed and re-created - only reconnecting it re-uses the old wire.  
-This mod also fixes temporary wires connecting the wrong way to inputs on the output side (like the target for Write nodes).
+This mod also fixes temporary wires connecting the wrong way to inputs/outputs that have been moved to the "wrong" side (like the target for Write nodes).
 
 ## Installation
 1. Install [NeosModLoader](https://github.com/zkxs/NeosModLoader).
